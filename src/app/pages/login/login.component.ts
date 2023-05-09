@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from 'src/app/login.service';
 import { UserLoginInfo } from 'src/app/interfaces/login-info';
 import { catchError } from 'rxjs';
@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
+  route = inject(ActivatedRoute);
   router = inject(Router);
   loginService = inject(LoginService);
 
@@ -22,6 +23,13 @@ export class LoginComponent {
     email: '',
     password: '',
   };
+  redirectUrl = '';
+
+  ngOnInit() {
+    this.route.queryParamMap.subscribe((queryParamMap) => {
+      this.redirectUrl = queryParamMap.get('redirect') || '';
+    });
+  }
 
   login() {
     this.loginService
@@ -34,7 +42,7 @@ export class LoginComponent {
       )
       .subscribe((result) => {
         localStorage.setItem('token', result.user.token);
-        this.router.navigateByUrl('/');
+        this.router.navigateByUrl(this.redirectUrl || '/');
       });
   }
 }

@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard } from 'src/app/auth.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'posts', pathMatch: 'full' },
@@ -14,6 +15,7 @@ const routes: Routes = [
   },
   {
     path: 'create',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./create/create.component').then((c) => c.CreateComponent),
   },
