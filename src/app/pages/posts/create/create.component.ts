@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-create',
@@ -13,9 +13,9 @@ export class CreateComponent {
   formBuilder = inject(FormBuilder);
 
   post = this.formBuilder.group({
-    title: this.formBuilder.control(''),
+    title: this.formBuilder.control('', Validators.required),
     description: this.formBuilder.control(''),
-    body: this.formBuilder.control(''),
+    body: this.formBuilder.control('', [Validators.required, Validators.minLength(10)]),
     tags: this.formBuilder.array([
       this.formBuilder.control('Angular'),
       this.formBuilder.control('HTML'),
