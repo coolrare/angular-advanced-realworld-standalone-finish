@@ -4,7 +4,7 @@
       <div class="col-md-6 col-md-offset-3 col-xs-12">
         <h1 class="text-xs-center">Sign in</h1>
 
-        <form (ngSubmit)="login()">
+        <form (ngSubmit)="login()" #tForm="ngForm">
           <fieldset class="form-group">
             <input
               name="email"
@@ -12,8 +12,15 @@
               type="text"
               placeholder="Email"
               [(ngModel)]="user.email"
+              required
+              email
+              #tEmail="ngModel"
             />
           </fieldset>
+          <ul *ngIf="tEmail.invalid">
+            <li *ngIf="tEmail.hasError('required')">請輸入 email 地址</li>
+            <li *ngIf="tEmail.hasError('email')">email 格式不正確</li>
+          </ul>
           <fieldset class="form-group">
             <input
               name="password"
@@ -21,9 +28,16 @@
               type="password"
               placeholder="Password"
               [(ngModel)]="user.password"
+              required
+              minlength="4"
+              #tPassword="ngModel"
             />
           </fieldset>
-          <button class="btn btn-lg btn-primary pull-xs-right">Sign in</button>
+          <ul *ngIf="tPassword.invalid">
+            <li *ngIf="tPassword.hasError('required')">請輸入密碼</li>
+            <li *ngIf="tPassword.hasError('minlength')">密碼長度至少 4 個字</li>
+          </ul>
+          <button class="btn btn-lg btn-primary pull-xs-right" [disabled]="tForm.invalid">Sign in</button>
         </form>
       </div>
     </div>
